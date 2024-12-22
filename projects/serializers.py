@@ -21,7 +21,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
-    task = serializers.StringRelatedField()
+    task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all())
 
     class Meta:
         model = Comment
@@ -29,6 +29,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ProjectMemberSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = ProjectMember
         fields = ['id', 'project', 'user', 'role']
+        read_only_fields = ['project'] 
